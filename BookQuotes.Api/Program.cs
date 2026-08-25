@@ -1,4 +1,7 @@
 
+using BookQuotes.Api.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+
 namespace BookQuotes.Api
 {
     public class Program
@@ -12,6 +15,9 @@ namespace BookQuotes.Api
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.AddDbContext<BookQuotesDbContext>(options => 
+                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
