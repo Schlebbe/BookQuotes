@@ -6,4 +6,4 @@
 *.user
 *.suo
 
-*.db
+BookQuotes.Api/Data/
