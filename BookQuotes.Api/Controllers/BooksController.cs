@@ -35,6 +35,30 @@ namespace BookQuotes.Api.Controllers
             return Ok(books);
         }
 
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<ActionResult<BookResponse>> GetBookAsync(int id)
+        {
+            var book = await _dbContext.Books
+                .AsNoTracking()
+                .SingleOrDefaultAsync(b => b.Id == id);
+
+            if (book is null)
+            {
+                return NotFound();
+            }
+
+            var bookResponse = new BookResponse
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Author = book.Author,
+                PublicationDate = book.PublicationDate
+            };
+
+            return Ok(bookResponse);
+        }
+
         [HttpPost]
         public async Task<ActionResult<BookResponse>> CreateBookAsync(CreateBookRequest book)
         {
