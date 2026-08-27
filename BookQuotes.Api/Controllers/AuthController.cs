@@ -10,10 +10,12 @@ namespace BookQuotes.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly JwtTokenService _jwtTokenService;
 
-        public AuthController(UserManager<ApplicationUser> userManager)
+        public AuthController(UserManager<ApplicationUser> userManager, JwtTokenService jwtTokenService)
         {
             _userManager = userManager;
+            _jwtTokenService = jwtTokenService;
         }
 
         [HttpPost]
@@ -39,6 +41,26 @@ namespace BookQuotes.Api.Controllers
             }
 
             return ValidationProblem(ModelState);
+        }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<ActionResult<LoginResponse>> LoginAsync([FromBody] LoginRequest request)
+        {
+            var user = await _userManager.FindByNameAsync(request.Username);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+            if (!isPasswordValid)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(new LoginResponse { Token = _jwtTokenService.GenerateToken(user) });
         }
     }
 }
