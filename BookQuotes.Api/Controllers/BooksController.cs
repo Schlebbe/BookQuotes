@@ -91,5 +91,38 @@ namespace BookQuotes.Api.Controllers
 
             return BadRequest();
         }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<ActionResult<BookResponse>> UpdateBookByIdAsync(int id, UpdateBookRequest book)
+        {
+            var existingBook = await _dbContext.Books.SingleOrDefaultAsync(b => b.Id == id);
+            
+            if (existingBook is null)
+            {
+                return NotFound();
+            }
+
+            if (book.PublicationDate is null)
+            {
+                return BadRequest("Publication date is required.");
+            }
+
+            existingBook.Title = book.Title;
+            existingBook.Author = book.Author;
+            existingBook.PublicationDate = book.PublicationDate.Value;
+
+            await _dbContext.SaveChangesAsync();
+
+            var bookResponse = new BookResponse
+            {
+                Id = existingBook.Id,
+                Title = existingBook.Title,
+                Author = existingBook.Author,
+                PublicationDate = existingBook.PublicationDate
+            };
+
+            return Ok(bookResponse);
+        }
     }
 }
