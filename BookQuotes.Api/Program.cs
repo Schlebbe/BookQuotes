@@ -1,4 +1,5 @@
 
+using BookQuotes.Api.Infrastructure.Identity;
 using BookQuotes.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -21,6 +22,11 @@ namespace BookQuotes.Api
             Directory.CreateDirectory(Path.Combine(builder.Environment.ContentRootPath, "Data"));
             builder.Services.AddDbContext<BookQuotesDbContext>(options => 
                 options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Add Identity services
+            builder.Services
+                .AddIdentityCore<ApplicationUser>()
+                .AddEntityFrameworkStores<BookQuotesDbContext>();
 
             var app = builder.Build();
 
