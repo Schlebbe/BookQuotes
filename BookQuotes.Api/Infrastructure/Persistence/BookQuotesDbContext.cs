@@ -1,10 +1,11 @@
 ﻿using BookQuotes.Api.Domain;
+using BookQuotes.Api.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BookQuotes.Api.Infrastructure.Persistence
 {
-    public class BookQuotesDbContext : DbContext
+    public class BookQuotesDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Book> Books => Set<Book>();
         public DbSet<Quote> Quotes => Set<Quote>();
