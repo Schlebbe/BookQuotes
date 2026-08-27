@@ -124,5 +124,21 @@ namespace BookQuotes.Api.Controllers
 
             return Ok(bookResponse);
         }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<IActionResult> DeleteBookByIdAsync(int id)
+        {
+            var existingBook = await _dbContext.Books.SingleOrDefaultAsync(b => b.Id == id);
+            if (existingBook is null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.Books.Remove(existingBook);
+            await _dbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
