@@ -88,7 +88,10 @@ namespace BookQuotes.Api.Controllers
                     Author = newBook.Author,
                     PublicationDate = newBook.PublicationDate
                 };
-                return Created($"/api/books/{newBook.Id}", bookResponse);
+                return CreatedAtAction(
+                    nameof(GetBookAsync),
+                    new { id = newBook.Id },
+                    bookResponse);
             }
 
             return BadRequest();
