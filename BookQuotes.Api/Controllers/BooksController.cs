@@ -1,11 +1,13 @@
 ﻿using BookQuotes.Api.Domain;
 using BookQuotes.Api.Features.Books.Contracts;
 using BookQuotes.Api.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookQuotes.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BooksController : ControllerBase
